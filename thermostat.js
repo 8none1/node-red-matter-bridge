@@ -33,6 +33,8 @@ module.exports = function(RED) {
         
         node.modeEvt = function(value, oldValue, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             if (hasProperty(context, 'offline')) {
                 eventSource.local = true
             } else {
@@ -67,6 +69,8 @@ module.exports = function(RED) {
         
         node.coolSetpointEvt =  function(value, oldValue, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             if (hasProperty(context, 'offline')) {
                 eventSource.local = true
             } else {
@@ -95,6 +99,8 @@ module.exports = function(RED) {
         
         node.heatSetpointEvt =  function(value, oldValue, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             if (hasProperty(context, 'offline')) {
                 eventSource.local = true
             } else {
@@ -123,6 +129,8 @@ module.exports = function(RED) {
 
         node.tempEvt =  function(value, oldValue, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             if (hasProperty(context, 'offline')) {
                 eventSource.local = true
             } else {
@@ -156,6 +164,7 @@ module.exports = function(RED) {
                      }
                      if (config.wires.length != 0){
                          msg.payload = node.device.state
+                         msg.eventSource = { name: config.name, id: node.id }
                          node.send(msg)
                      } else{
                          node.error((node.device.state));

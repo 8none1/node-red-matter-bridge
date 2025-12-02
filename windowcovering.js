@@ -39,6 +39,7 @@ module.exports = function(RED) {
                      }
                      if (config.wires.length != 0){
                          msg.payload = node.device.state
+                         msg.eventSource = { name: config.name, id: node.id }
                          node.send(msg)
                      } else{
                          node.error((node.device.state));
@@ -105,6 +106,8 @@ module.exports = function(RED) {
        
         node.liftTiltEvt =  function(value, oldValue, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             if (hasProperty(context, 'offline')) {
                 eventSource.local = true
             } else {
@@ -137,6 +140,8 @@ module.exports = function(RED) {
 
         node.liftMovementEvt = function(direction, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             //if (hasProperty(context, 'offline')) {
             //    eventSource.local = true
             //} else {
@@ -148,13 +153,13 @@ module.exports = function(RED) {
             data = {'action' : 'lift', 'direction' : direction}
             if ((node.pending && node.passthrough)) {
                 var msg = node.pendingmsg
-                //msg.eventSource = eventSource
+                msg.eventSource = eventSource
                 msg.payload=data
                 node.send(msg);
             } else if (!node.pending){
                 var msg = {payload : {}};
                 if (node.topic) {msg.topic = node.topic}
-                //msg.eventSource = eventSource
+                msg.eventSource = eventSource
                 msg.payload=data
                 node.send(msg);
             }
@@ -163,6 +168,8 @@ module.exports = function(RED) {
 
         node.tiltMovementEvt =  function(direction, context) {
             let eventSource = {}
+            eventSource.name = config.name
+            eventSource.id = node.id
             //if (hasProperty(context, 'offline')) {
             //    eventSource.local = true
             //} else {
